@@ -7,8 +7,7 @@
 namespace esphome {
 namespace cse7761 {
 
-enum SonoffModel : uint8_t
-{
+enum SonoffModel : uint8_t {
   CSE7761_MODEL_DUALR3 = 0,
   CSE7761_MODEL_POWCT
 

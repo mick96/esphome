@@ -15,27 +15,27 @@ static const char *const TAG = "cse7761";
  * https://github.com/arendst/Tasmota/blob/development/tasmota/tasmota_xnrg_energy/xnrg_19_cse7761.ino
 \*********************************************************************************************/
 
-static const int CSE7761_UREF                   = 42563;    // RmsUc
-static const int CSE7761_IREF                   = 52241;    // RmsIAC
-static const int CSE7761_PREF                   = 44513;    // PowerPAC
-static const int CSE7761_FREF                   = 3579545;  // System clock (3.579545MHz) as used in frequency calculation
+static const int CSE7761_UREF = 42563;    // RmsUc
+static const int CSE7761_IREF = 52241;    // RmsIAC
+static const int CSE7761_PREF = 44513;    // PowerPAC
+static const int CSE7761_FREF = 3579545;  // System clock (3.579545MHz) as used in frequency calculation
 
-static const uint8_t CSE7761_REG_SYSCON         = 0x00;     // (2) System Control Register (0x0A04)
-static const uint8_t CSE7761_REG_EMUCON         = 0x01;     // (2) Metering control register (0x0000)
-static const uint8_t CSE7761_REG_EMUCON2        = 0x13;     // (2) Metering control register 2 (0x0001)
-static const uint8_t CSE7761_REG_PULSE1SEL      = 0x1D;     // (2) Pin function output select register (0x3210)
+static const uint8_t CSE7761_REG_SYSCON = 0x00;     // (2) System Control Register (0x0A04)
+static const uint8_t CSE7761_REG_EMUCON = 0x01;     // (2) Metering control register (0x0000)
+static const uint8_t CSE7761_REG_EMUCON2 = 0x13;    // (2) Metering control register 2 (0x0001)
+static const uint8_t CSE7761_REG_PULSE1SEL = 0x1D;  // (2) Pin function output select register (0x3210)
 
-static const uint8_t CSE7761_REG_UFREQ          = 0x23;     // (2) Voltage Frequency (0x0000)
-static const uint8_t CSE7761_REG_RMSIA          = 0x24;     // (3) The effective value of channel A current (0x000000)
-static const uint8_t CSE7761_REG_RMSIB          = 0x25;     // (3) The effective value of channel B current (0x000000)
-static const uint8_t CSE7761_REG_RMSU           = 0x26;     // (3) Voltage RMS (0x000000)
-static const uint8_t CSE7761_REG_POWERPA        = 0x2C;     // (4) Channel A active power, update rate 27.2Hz (0x00000000)
-static const uint8_t CSE7761_REG_POWERPB        = 0x2D;     // (4) Channel B active power, update rate 27.2Hz (0x00000000)
-static const uint8_t CSE7761_REG_SYSSTATUS      = 0x43;     // (1) System status register
+static const uint8_t CSE7761_REG_UFREQ = 0x23;      // (2) Voltage Frequency (0x0000)
+static const uint8_t CSE7761_REG_RMSIA = 0x24;      // (3) The effective value of channel A current (0x000000)
+static const uint8_t CSE7761_REG_RMSIB = 0x25;      // (3) The effective value of channel B current (0x000000)
+static const uint8_t CSE7761_REG_RMSU = 0x26;       // (3) Voltage RMS (0x000000)
+static const uint8_t CSE7761_REG_POWERPA = 0x2C;    // (4) Channel A active power, update rate 27.2Hz (0x00000000)
+static const uint8_t CSE7761_REG_POWERPB = 0x2D;    // (4) Channel B active power, update rate 27.2Hz (0x00000000)
+static const uint8_t CSE7761_REG_SYSSTATUS = 0x43;  // (1) System status register
 
 // static const uint8_t CSE7761_REG_COEFFOFFSET    = 0x6E;     // (2) Coefficient checksum offset (0xFFFF)
-static const uint8_t CSE7761_REG_COEFFCHKSUM    = 0x6F;     // (2) Coefficient checksum
-static const uint8_t CSE7761_REG_RMSIAC         = 0x70;     // (2) Channel A effective current conversion coefficient
+static const uint8_t CSE7761_REG_COEFFCHKSUM = 0x6F;  // (2) Coefficient checksum
+static const uint8_t CSE7761_REG_RMSIAC = 0x70;       // (2) Channel A effective current conversion coefficient
 // static const uint8_t CSE7761_REG_RMSIBC         = 0x71;     // (2) Channel B effective current conversion coefficient
 // static const uint8_t CSE7761_REG_RMSUC          = 0x72;     // (2) Effective voltage conversion coefficient
 // static const uint8_t CSE7761_REG_POWERPAC       = 0x73;     // (2) Channel A active power conversion coefficient
@@ -44,16 +44,22 @@ static const uint8_t CSE7761_REG_RMSIAC         = 0x70;     // (2) Channel A eff
 // static const uint8_t CSE7761_REG_ENERGYAC       = 0x76;     // (2) Channel A energy conversion coefficient
 // static const uint8_t CSE7761_REG_ENERGYBC       = 0x77;     // (2) Channel B energy conversion coefficient
 
-static const uint8_t CSE7761_SPECIAL_COMMAND    = 0xEA;     // Start special command
-static const uint8_t CSE7761_CMD_RESET          = 0x96;     // Reset command, after receiving the command, the chip resets
-// static const uint8_t CSE7761_CMD_CHAN_A_SELECT  = 0x5A;     // Current channel A setting command, which specifies the current used to calculate apparent power,
-//                                                             //   Power factor, phase angle, instantaneous active power, instantaneous apparent power and
-//                                                             //   The channel indicated by the signal of power overload is channel A
-// static const uint8_t CSE7761_CMD_CHAN_B_SELECT  = 0xA5;     // Current channel B setting command, which specifies the current used to calculate apparent power,
-//                                                             //   Power factor, phase angle, instantaneous active power, instantaneous apparent power and
-//                                                             //   The channel indicated by the signal of power overload is channel B
-static const uint8_t CSE7761_CMD_CLOSE_WRITE    = 0xDC;     // Close write operation
-static const uint8_t CSE7761_CMD_ENABLE_WRITE   = 0xE5;     // Enable write operation
+static const uint8_t CSE7761_SPECIAL_COMMAND = 0xEA;  // Start special command
+static const uint8_t CSE7761_CMD_RESET = 0x96;        // Reset command, after receiving the command, the chip resets
+// static const uint8_t CSE7761_CMD_CHAN_A_SELECT  = 0x5A;     // Current channel A setting command, which specifies the
+// current used to calculate apparent power,
+//                                                             //   Power factor, phase angle, instantaneous active
+//                                                             power, instantaneous apparent power and
+//                                                             //   The channel indicated by the signal of power
+//                                                             overload is channel A
+// static const uint8_t CSE7761_CMD_CHAN_B_SELECT  = 0xA5;     // Current channel B setting command, which specifies the
+// current used to calculate apparent power,
+//                                                             //   Power factor, phase angle, instantaneous active
+//                                                             power, instantaneous apparent power and
+//                                                             //   The channel indicated by the signal of power
+//                                                             overload is channel B
+static const uint8_t CSE7761_CMD_CLOSE_WRITE = 0xDC;   // Close write operation
+static const uint8_t CSE7761_CMD_ENABLE_WRITE = 0xE5;  // Enable write operation
 
 enum CSE7761 { RMS_IAC, RMS_IBC, RMS_UC, POWER_PAC, POWER_PBC, POWER_SC, ENERGY_AC, ENERGY_BC };
 
@@ -174,9 +180,9 @@ uint32_t CSE7761Component::coefficient_by_unit_(uint32_t unit) {
     case RMS_UC:
       return 0x400000 * 100 / this->data_.coefficient[RMS_UC];
     case RMS_IAC:
-      return (0x800000 * 100 / (this->data_.coefficient[RMS_IAC] * coeff )) * 10;  // Stay within 32 bits
+      return (0x800000 * 100 / (this->data_.coefficient[RMS_IAC] * coeff)) * 10;  // Stay within 32 bits
     case POWER_PAC:
-      return 0x80000000 / (this->data_.coefficient[POWER_PAC] * coeff );
+      return 0x80000000 / (this->data_.coefficient[POWER_PAC] * coeff);
   }
   return 0;
 }
@@ -200,7 +206,7 @@ bool CSE7761Component::chip_init_() {
 
   uint8_t sys_status = this->read_(CSE7761_REG_SYSSTATUS, 1);
   if (sys_status & 0x10) {  // Write enable to protected registers (WREN)
-    
+
     /*
       System Control Register (SYSCON)  Addr:0x00  Default value: 0x0A04
       Bit    name               Function description
@@ -230,43 +236,35 @@ bool CSE7761Component::chip_init_() {
     */
 
     if (this->data_.model == CSE7761_MODEL_POWCT) {
-      this->write_(CSE7761_REG_SYSCON | 0x80, 0xFE00);    //POW CT + enable channel B 
+      this->write_(CSE7761_REG_SYSCON | 0x80, 0xFE00);  // POW CT + enable channel B
     } else {
-      this->write_(CSE7761_REG_SYSCON | 0x80, 0xFF04);    // Sonoff Dual R3
+      this->write_(CSE7761_REG_SYSCON | 0x80, 0xFF04);  // Sonoff Dual R3
     }
 
     /*
       Energy Measure Control Register (EMUCON)  Addr:0x01  Default value: 0x0000
       Bit    name               Function description
       15-14  Tsensor_Step[1:0]  Measurement steps of temperature sensor:
-                                =2'b00 The first step of temperature sensor measurement, the Offset of OP1 and OP2 is +/+. (Sonoff Dual R3 / Pow CT)
-                                =2'b01 The second step of temperature sensor measurement, the Offset of OP1 and OP2 is +/-.
-                                =2'b10 The third step of temperature sensor measurement, the Offset of OP1 and OP2 is -/+.
-                                =2'b11 The fourth step of temperature sensor measurement, the Offset of OP1 and OP2 is -/-.
-                                After measuring these four results and averaging, the AD value of the current measured temperature can be obtained.
-      13     tensor_en          Temperature measurement module control
-                                =0 when the temperature measurement module is closed; (Sonoff Dual R3 / Pow CT)
-                                =1 when the temperature measurement module is turned on;
-      12     comp_off           Comparator module close signal:
-                                =0 when the comparator module is in working state
-                                =1 when the comparator module is off (Sonoff Dual R3 / Pow CT)
-      11-10  Pmode[1:0]         Selection of active energy calculation method:
-                                Pmode =00, both positive and negative active energy participate in the accumulation,
-                                  the accumulation method is algebraic sum mode, the reverse REVQ symbol indicates to active power; (Sonoff Dual R3 / Pow CT)
-                                Pmode = 01, only accumulate positive active energy;
-                                Pmode = 10, both positive and negative active energy participate in the accumulation,
-                                  and the accumulation method is absolute value method. No reverse active power indication;
-                                Pmode =11, reserved, the mode is the same as Pmode =00
-      9      NC                 -
-      8      ZXD1               The initial value of ZX output is 0, and different waveforms are output according to the configuration of ZXD1 and ZXD0:
-                                =0, it means that the ZX output changes only at the selected zero-crossing point (Sonoff Dual R3 / Pow CT)
-                                =1, indicating that the ZX output changes at both the positive and negative zero crossings
-      7      ZXD0
-                                =0, indicates that the positive zero-crossing point is selected as the zero-crossing detection signal (Sonoff Dual R3 / Pow CT)
-                                =1, indicating that the negative zero-crossing point is selected as the zero-crossing detection signal
-      6      HPFIBOFF
-                                =0, enable current channel B digital high-pass filter (Sonoff Dual R3)
-                                =1, turn off the digital high-pass filter of current channel B (Pow CT)
+                                =2'b00 The first step of temperature sensor measurement, the Offset of OP1 and OP2 is
+      +/+. (Sonoff Dual R3 / Pow CT) =2'b01 The second step of temperature sensor measurement, the Offset of OP1 and OP2
+      is +/-. =2'b10 The third step of temperature sensor measurement, the Offset of OP1 and OP2 is -/+. =2'b11 The
+      fourth step of temperature sensor measurement, the Offset of OP1 and OP2 is -/-. After measuring these four
+      results and averaging, the AD value of the current measured temperature can be obtained. 13     tensor_en
+      Temperature measurement module control =0 when the temperature measurement module is closed; (Sonoff Dual R3 / Pow
+      CT) =1 when the temperature measurement module is turned on; 12     comp_off           Comparator module close
+      signal: =0 when the comparator module is in working state =1 when the comparator module is off (Sonoff Dual R3 /
+      Pow CT) 11-10  Pmode[1:0]         Selection of active energy calculation method: Pmode =00, both positive and
+      negative active energy participate in the accumulation, the accumulation method is algebraic sum mode, the reverse
+      REVQ symbol indicates to active power; (Sonoff Dual R3 / Pow CT) Pmode = 01, only accumulate positive active
+      energy; Pmode = 10, both positive and negative active energy participate in the accumulation, and the accumulation
+      method is absolute value method. No reverse active power indication; Pmode =11, reserved, the mode is the same as
+      Pmode =00 9      NC                 - 8      ZXD1               The initial value of ZX output is 0, and different
+      waveforms are output according to the configuration of ZXD1 and ZXD0: =0, it means that the ZX output changes only
+      at the selected zero-crossing point (Sonoff Dual R3 / Pow CT) =1, indicating that the ZX output changes at both
+      the positive and negative zero crossings 7      ZXD0 =0, indicates that the positive zero-crossing point is
+      selected as the zero-crossing detection signal (Sonoff Dual R3 / Pow CT) =1, indicating that the negative
+      zero-crossing point is selected as the zero-crossing detection signal 6      HPFIBOFF =0, enable current channel B
+      digital high-pass filter (Sonoff Dual R3) =1, turn off the digital high-pass filter of current channel B (Pow CT)
       5      HPFIAOFF
                                 =0, enable current channel A digital high-pass filter (Sonoff Dual R3 / Pow CT)
                                 =1, turn off the digital high-pass filter of current channel A
@@ -275,14 +273,15 @@ bool CSE7761Component::chip_init_() {
                                 =1, turn off the U channel digital high-pass filter
       3-2    NC                 -
       1      PBRUN
-                                =1, enable PFB pulse output and active energy register accumulation; (Sonoff Dual R3 / Pow CT)
-                                =0 (default), turn off PFB pulse output and active energy register accumulation.
-      0      PARUN
-                                =1, enable PFA pulse output and active energy register accumulation; (Sonoff Dual R3 / Pow CT)
-                                =0 (default), turn off PFA pulse output and active energy register accumulation.
+                                =1, enable PFB pulse output and active energy register accumulation; (Sonoff Dual R3 /
+      Pow CT) =0 (default), turn off PFB pulse output and active energy register accumulation. 0      PARUN =1, enable
+      PFA pulse output and active energy register accumulation; (Sonoff Dual R3 / Pow CT) =0 (default), turn off PFA
+      pulse output and active energy register accumulation.
     */
 
-    this->write_(CSE7761_REG_EMUCON | 0x80, 0x1183);  //Same as Sonoff Dual R3 (enable channel B) + zero crossing on both negative and positive signal 
+    this->write_(
+        CSE7761_REG_EMUCON | 0x80,
+        0x1183);  // Same as Sonoff Dual R3 (enable channel B) + zero crossing on both negative and positive signal
 
     /*
       Energy Measure Control Register (EMUCON2)  Addr: 0x13  Default value: 0x0001
@@ -291,16 +290,12 @@ bool CSE7761Component::chip_init_() {
       12     SDOCmos
                                 =1, SDO pin CMOS open-drain output
                                 =0, SDO pin CMOS output (Sonoff Dual R3 / Pow CT)
-      11     EPB_CB             Energy_PB clear signal control, the default is 0, and it needs to be configured to 1 in UART mode.
-                                  Clear after reading is not supported in UART mode
-                                =1, Energy_PB will not be cleared after reading; (Sonoff Dual R3 / Pow CT)
-                                =0, Energy_PB is cleared after reading;
-      10     EPA_CB             Energy_PA clear signal control, the default is 0, it needs to be configured to 1 in UART mode,
-                                  Clear after reading is not supported in UART mode
-                                =1, Energy_PA will not be cleared after reading; (Sonoff Dual R3 / Pow CT)
-                                =0, Energy_PA is cleared after reading;
-      9-8    DUPSEL[1:0]        Average register update frequency control
-                                =00, Update frequency 3.4Hz
+      11     EPB_CB             Energy_PB clear signal control, the default is 0, and it needs to be configured to 1 in
+      UART mode. Clear after reading is not supported in UART mode =1, Energy_PB will not be cleared after reading;
+      (Sonoff Dual R3 / Pow CT) =0, Energy_PB is cleared after reading; 10     EPA_CB             Energy_PA clear signal
+      control, the default is 0, it needs to be configured to 1 in UART mode, Clear after reading is not supported in
+      UART mode =1, Energy_PA will not be cleared after reading; (Sonoff Dual R3 / Pow CT) =0, Energy_PA is cleared
+      after reading; 9-8    DUPSEL[1:0]        Average register update frequency control =00, Update frequency 3.4Hz
                                 =01, Update frequency 6.8Hz
                                 =10, Update frequency 13.65Hz
                                 =11, Update frequency 27.3Hz (Sonoff Dual R3 / Pow CT)
@@ -316,19 +311,17 @@ bool CSE7761Component::chip_init_() {
       4      SAGEN              Voltage drop detection enable signal, WaveEN=1 must be configured first
                                 =1, turn on the voltage drop detection function
                                 =0, turn off the voltage drop detection function (Sonoff Dual R3 / Pow CT)
-      3      OverEN             Overvoltage, overcurrent, and overload detection enable signal, WaveEN=1 must be configured first
-                                =1, turn on the overvoltage, overcurrent, and overload detection functions
-                                =0, turn off the overvoltage, overcurrent, and overload detection functions (Sonoff Dual R3 / Pow CT)
-      2      ZxEN               Zero-crossing detection, phase angle, voltage frequency measurement enable signal
-                                =1, turn on the zero-crossing detection, phase angle, and voltage frequency measurement functions (if frequency enable)
-                                =0, disable zero-crossing detection, phase angle, voltage frequency measurement functions (Sonoff Dual R3 / Pow CT)
-      1      PeakEN             Peak detect enable signal
-                                =1, turn on the peak detection function
-                                =0, turn off the peak detection function (Sonoff Dual R3 / Pow CT)
-      0      NC                 Default is 1
+      3      OverEN             Overvoltage, overcurrent, and overload detection enable signal, WaveEN=1 must be
+      configured first =1, turn on the overvoltage, overcurrent, and overload detection functions =0, turn off the
+      overvoltage, overcurrent, and overload detection functions (Sonoff Dual R3 / Pow CT) 2      ZxEN Zero-crossing
+      detection, phase angle, voltage frequency measurement enable signal =1, turn on the zero-crossing detection, phase
+      angle, and voltage frequency measurement functions (if frequency enable) =0, disable zero-crossing detection,
+      phase angle, voltage frequency measurement functions (Sonoff Dual R3 / Pow CT) 1      PeakEN             Peak
+      detect enable signal =1, turn on the peak detection function =0, turn off the peak detection function (Sonoff Dual
+      R3 / Pow CT) 0      NC                 Default is 1
     */
 
-    this->write_(CSE7761_REG_EMUCON2 | 0x80, 0x0FE5); // Sonoff Dual R3 / Pow CT + frequency measure enable
+    this->write_(CSE7761_REG_EMUCON2 | 0x80, 0x0FE5);  // Sonoff Dual R3 / Pow CT + frequency measure enable
 
     /*
       Pin function output selection register (PULSE1SEL)  Addr: 0x1D  Default value: 0x3210
@@ -363,7 +356,7 @@ bool CSE7761Component::chip_init_() {
     */
 
     // this->write_(CSE7761_REG_PULSE1SEL | 0x80, 0x3290);  // Enable zero crosing signal output on function pin
- 
+
   } else {
     ESP_LOGD(TAG, "Write failed at chip_init");
     return false;
@@ -400,10 +393,10 @@ void CSE7761Component::get_data_() {
     this->voltage_sensor_->publish_state(voltage);
   }
 
-  float freq = (this->data_.frequency) ? ((float) CSE7761_FREF  / 8 / this->data_.frequency) : 0;  // Hz
+  float freq = (this->data_.frequency) ? ((float) CSE7761_FREF / 8 / this->data_.frequency) : 0;  // Hz
   if (this->frequency_sensor_ != nullptr) {
     this->frequency_sensor_->publish_state(freq);
-  }  
+  }
   for (uint8_t channel = 0; channel < 2; channel++) {
     // Active power = PowerPA * PowerPAC * 1000 / 0x80000000
     float active_power = (float) this->data_.active_power[channel] / this->coefficient_by_unit_(POWER_PAC);  // W
