@@ -329,14 +329,6 @@ bool CSE7761Component::chip_init_() {
     */
 
     this->write_(CSE7761_REG_EMUCON2 | 0x80, 0x0FE5); // Sonoff Dual R3 / Pow CT + frequency measure enable
-    // !!!!!!!! CLEAN MEEEEEE UPPPPPP !!!!!!!!!!!!!!  
-    // if (this->frequency_sensor_ != nullptr) {
-    //   this->write_(CSE7761_REG_EMUCON2 | 0x80, 0x0FE5); // Sonoff Dual R3 / Pow CT + frequency measure enable
-    // } else {
-    //   this->write_(CSE7761_REG_EMUCON2 | 0x80, 0x0FC1); // Sonoff Dual R3 / Pow CT
-    // }
-    // !!!!!!!! CLEAN MEEEEEE UPPPPPP !!!!!!!!!!!!!!
-
 
     /*
       Pin function output selection register (PULSE1SEL)  Addr: 0x1D  Default value: 0x3210
